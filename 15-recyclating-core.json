@@ -1,0 +1,10 @@
+{
+  "n": 15,
+  "id": "RECYCLATING_CORE",
+  "name": "Recyclating Core",
+  "category": "RECYCLEUR",
+  "node": "ALL",
+  "priority": 50,
+  "impl": "revitalizor",
+  "role": "Le Revitalizor : copy/delete/paste + défrag réels de la data de l'app."
+}

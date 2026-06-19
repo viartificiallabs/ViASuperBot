@@ -1,0 +1,10 @@
+{
+  "n": 2,
+  "id": "SUPERSAM_A",
+  "name": "SUPERSAM A",
+  "category": "PHYSIQUE",
+  "node": "CPU",
+  "priority": 0,
+  "impl": "telemetry",
+  "role": "L'os : lit les VRAIS signaux du device (cœurs, mémoire, batterie*, réseau)."
+}
