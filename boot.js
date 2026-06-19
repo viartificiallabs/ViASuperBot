@@ -19,8 +19,13 @@ export async function bootViArtificialOS(opts = {}) {
   const revitalizor = new Revitalizor({ kernel: os, config: opts.revitalizor || {} });
   os.revitalizor = revitalizor;
 
-  // Enregistre les 26 moteurs (depuis les 26 JSON) AVANT le boot, pour qu'ils soient bootés/tickés.
-  await loadMotors(os, { base: opts.motorsBase || './motors', revitalizor });
+  // Enregistre les 26 moteurs EMBARQUÉS (zéro fetch -> pas de 404 possible). L'OS démarre toujours.
+  try {
+    await loadMotors(os, { revitalizor });
+  } catch (e) {
+    os.motorError = e;
+    console.error('[ViA] Moteurs non chargés :', e);
+  }
 
   // Calibre SUPERSAM A -> OPFS -> SLC SYNC -> boot ordonné des 26 -> démarre l'horloge.
   await os.boot();
