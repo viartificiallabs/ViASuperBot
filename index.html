@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SuperBot · ViA</title>
+<style>
+:root{
+  --bg:#06070c; --bg2:#0b0d16; --ink:#eef1f6; --mut:#8a93a6;
+  --gold:#d4af37; --green:#00ff41; --pink:#ff63c6; --cyan:#38e6ff; --violet:#9b6cff;
+  --line:rgba(255,255,255,.08); --glass:rgba(255,255,255,.035);
+  --geo:14px 4px 14px 4px;
+  --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+body{min-height:100dvh;background:
+  radial-gradient(1200px 600px at 80% -10%,rgba(212,175,55,.10),transparent 60%),
+  radial-gradient(900px 500px at -10% 18%,rgba(56,230,255,.07),transparent 60%),
+  var(--bg);
+  padding:env(safe-area-inset-top) 0 0}
+.wrap{max-width:560px;margin:0 auto;padding:8px 12px 132px;position:relative}
+
+/* ===== HEADER ===== */
+.hd{display:flex;align-items:center;gap:11px;padding:8px 2px 12px}
+.hd .mark{font-family:var(--mono);font-size:19px;color:var(--green);text-shadow:0 0 16px rgba(0,255,65,.5);line-height:1}
+.hd .tt{flex:1;min-width:0}
+.hd .title{font-family:var(--mono);font-weight:800;font-size:21px;letter-spacing:1px;
+  background:linear-gradient(100deg,var(--gold),#fff3c4,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hd .slogan{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--cyan);margin-top:1px}
+.hd .burger{font-size:20px;color:var(--mut);background:var(--glass);border:1px solid var(--line);
+  border-radius:11px 3px 11px 3px;width:42px;height:42px;display:grid;place-items:center;cursor:pointer}
+
+/* ===== HERO : GoleMotor + AniBot ===== */
+.hero{border:1px solid rgba(212,175,55,.25);border-radius:var(--geo);padding:13px;margin-bottom:12px;
+  background:linear-gradient(180deg,rgba(212,175,55,.06),rgba(0,255,65,.02));
+  box-shadow:0 0 30px rgba(212,175,55,.06) inset}
+.eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:9px}
+.anibot{display:flex;align-items:center;gap:13px;margin-bottom:12px}
+.face{font-family:var(--mono);font-size:27px;color:var(--green);text-shadow:0 0 16px rgba(0,255,65,.5);min-width:78px;text-align:center}
+.anibot .meta{flex:1;min-width:0}
+.anibot .nm{font-family:var(--mono);font-size:14px;color:var(--gold);letter-spacing:1px}
+.anibot .st{font-family:var(--mono);font-size:9.5px;color:var(--green)}
+.vit{display:flex;gap:4px;margin-top:6px}
+.vit i{height:4px;border-radius:3px;flex:1;background:rgba(255,255,255,.08);position:relative;overflow:hidden}
+.vit i::after{content:"";position:absolute;inset:0;width:var(--w,60%);border-radius:3px}
+.vit i.s::after{background:var(--pink)}.vit i.m::after{background:var(--green)}.vit i.n::after{background:var(--gold)}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.st{background:rgba(0,0,0,.32);border:1px solid var(--line);border-radius:9px;padding:9px;text-align:center}
+.st b{display:block;font-family:var(--mono);font-size:15px;color:var(--gold)}
+.st span{font-family:var(--mono);font-size:8px;color:var(--mut);letter-spacing:1px}
+.motrow{display:flex;gap:6px;margin-top:9px}
+.mot{flex:1;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:8px;padding:6px 7px}
+.mot .mn{font-family:var(--mono);font-size:8.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mot .bar{height:4px;border-radius:3px;background:rgba(255,255,255,.07);margin-top:5px;overflow:hidden}
+.mot .bar>i{display:block;height:100%;background:var(--green);width:30%;transition:width .5s}
+.boost{width:100%;margin-top:10px;background:linear-gradient(120deg,var(--gold),var(--pink));color:#1a1206;
+  border:none;border-radius:var(--geo);padding:11px;font-family:var(--mono);font-size:11.5px;font-weight:800;letter-spacing:1px;cursor:pointer}
+
+/* ===== CORPS : ViA + modes + modules ===== */
+.corps{}
+.lab{font-family:var(--mono);font-size:8.5px;letter-spacing:2px;color:var(--mut);text-transform:uppercase;margin:0 2px 6px}
+.row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.row::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;font-family:var(--mono);font-size:11px;letter-spacing:.4px;color:var(--mut);
+  background:var(--glass);border:1px solid var(--line);border-radius:var(--geo);padding:9px 13px;cursor:pointer;white-space:nowrap;transition:.16s}
+.modes .chip.on{color:var(--bg);background:linear-gradient(120deg,var(--green),var(--cyan));border-color:transparent;font-weight:700}
+.modules{margin-top:11px}
+.modules .chip.rel.on{color:var(--bg);background:var(--violet);border-color:transparent;font-weight:700}
+.modules .chip.ath.on{color:var(--bg);background:var(--cyan);border-color:transparent;font-weight:700}
+.modules .chip.hyb.on{color:var(--bg);background:var(--gold);border-color:transparent;font-weight:700}
+.ftabs{margin:13px 0 9px}
+.ftabs .chip.on{color:var(--bg);background:var(--ink);border-color:transparent;font-weight:700}
+
+.panel{display:none}.panel.on{display:block;animation:fade .22s ease}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+.log{min-height:170px;max-height:44dvh;overflow-y:auto;display:flex;flex-direction:column;gap:9px;padding:4px 2px}
+.msg{max-width:88%;padding:11px 13px;border-radius:var(--geo);font-size:14px;line-height:1.5;animation:pop .2s ease}
+@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.msg.usr{align-self:flex-end;background:linear-gradient(120deg,rgba(212,175,55,.16),rgba(212,175,55,.06));border:1px solid rgba(212,175,55,.35)}
+.msg.via{align-self:flex-start;background:rgba(0,255,65,.05);border:1px solid rgba(0,255,65,.22)}
+.msg.sys{align-self:center;background:transparent;border:1px dashed var(--line);color:var(--mut);font-family:var(--mono);font-size:11px;text-align:center}
+.msg .tag{font-family:var(--mono);font-size:9px;color:var(--mut);letter-spacing:.5px;margin-top:7px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.llbtn{font-family:var(--mono);font-size:9px;color:var(--cyan);border:1px solid rgba(56,230,255,.4);background:rgba(56,230,255,.07);border-radius:8px;padding:3px 8px;cursor:pointer}
+.typing{opacity:.7;font-style:italic}
+
+/* generic cards for bot/live/read */
+.card{background:var(--glass);border:1px solid var(--line);border-radius:var(--geo);padding:13px}
+.ct{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;display:flex;justify-content:space-between;margin-bottom:11px}
+.mini{font-family:var(--mono);font-size:10px;color:var(--mut);line-height:1.55}
+.fld{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:var(--geo);color:var(--ink);font-family:var(--sans);font-size:13px;padding:12px;outline:none;resize:vertical;min-height:84px}
+.ctrl{display:flex;align-items:center;gap:10px;margin-top:9px;font-family:var(--mono);font-size:10px;color:var(--mut)}
+.ctrl input[type=range]{flex:1;accent-color:var(--pink)}
+.bigbtn{width:100%;margin-top:11px;background:linear-gradient(120deg,var(--green),var(--cyan));color:var(--bg);border:none;border-radius:var(--geo);padding:12px;font-family:var(--mono);font-size:11.5px;font-weight:800;letter-spacing:1px;cursor:pointer}
+.task{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px}
+.task .tt{font-family:var(--mono);font-size:11px;color:var(--ink)}
+.task .tb{height:5px;border-radius:3px;background:rgba(255,255,255,.07);margin-top:7px;overflow:hidden}
+.task .tb>i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--green))}
+.task .ts{font-family:var(--mono);font-size:9px;color:var(--mut);margin-top:5px}
+.wave{height:40px;display:flex;align-items:center;justify-content:center;gap:3px;margin:9px 0}
+.wave i{width:3px;border-radius:3px;background:var(--green);height:8px;animation:eq 1s ease-in-out infinite}
+.wave i:nth-child(2n){background:var(--cyan)}.wave i:nth-child(3n){background:var(--pink)}
+@keyframes eq{0%,100%{height:8px}50%{height:32px}}
+.wave.off i{animation:none;height:6px;opacity:.4}
+
+/* ===== DOCK ===== */
+.dock{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(0deg,var(--bg) 72%,transparent);padding:8px 12px calc(10px + env(safe-area-inset-bottom));z-index:30}
+.dock .r{max-width:560px;margin:0 auto;display:flex;gap:7px;align-items:flex-end}
+textarea#in{flex:1;resize:none;height:46px;max-height:120px;background:var(--glass);color:var(--ink);border:1px solid var(--line);border-radius:var(--geo);padding:13px 14px;font-family:var(--sans);font-size:14px;outline:none}
+textarea#in:focus{border-color:rgba(0,255,65,.5)}
+.ib{width:46px;height:46px;flex:0 0 auto;border-radius:14px 4px 14px 4px;border:1px solid var(--line);background:var(--glass);color:var(--ink);font-size:17px;cursor:pointer;display:grid;place-items:center}
+.ib.send{background:linear-gradient(120deg,var(--green),var(--cyan));color:var(--bg);border:none;font-weight:800}
+.reg{max-width:560px;margin:6px auto 0;text-align:right;font-family:var(--mono);font-size:9px;color:var(--cyan)}
+
+/* ===== HISTORY DRAWER ===== */
+.scrim{position:fixed;inset:0;background:rgba(3,4,8,.6);backdrop-filter:blur(4px);z-index:50;display:none}
+.scrim.on{display:block}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:84%;max-width:340px;background:var(--bg2);border-right:1px solid var(--line);
+  z-index:51;transform:translateX(-105%);transition:transform .25s ease;padding:16px 14px calc(16px + env(safe-area-inset-bottom));overflow-y:auto}
+.drawer.on{transform:none}
+.drawer h3{font-family:var(--mono);font-size:13px;color:var(--gold);letter-spacing:1px;margin:0 0 12px;display:flex;justify-content:space-between}
+.drawer h3 .x{color:var(--mut);cursor:pointer;font-size:18px}
+.dbtn{width:100%;border:1px solid var(--line);background:var(--glass);color:var(--ink);font-family:var(--mono);font-size:11px;
+  border-radius:var(--geo);padding:11px;cursor:pointer;margin-bottom:8px;text-align:left}
+.dbtn.acc{background:linear-gradient(120deg,var(--green),var(--cyan));color:var(--bg);font-weight:700;border:none}
+.hsep{font-family:var(--mono);font-size:8.5px;letter-spacing:2px;color:var(--mut);margin:14px 2px 8px;text-transform:uppercase}
+.hitem{border:1px solid var(--line);background:rgba(0,0,0,.25);border-radius:10px;padding:10px;margin-bottom:7px;cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.hitem:hover{border-color:rgba(0,255,65,.3)}
+.hitem .ht{font-size:12px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hitem .hd2{font-family:var(--mono);font-size:8.5px;color:var(--mut);margin-top:3px}
+.hitem .del{color:var(--mut);font-size:15px;flex:0 0 auto;padding:0 4px}
+.hempty{font-family:var(--mono);font-size:10px;color:var(--mut);text-align:center;padding:18px 0}
+
+/* ===== LOGICLOG MODAL ===== */
+.modal{position:fixed;inset:0;background:rgba(3,4,8,.72);backdrop-filter:blur(6px);z-index:60;display:none;align-items:flex-end;justify-content:center}
+.modal.on{display:flex}
+.sheet{width:100%;max-width:560px;max-height:86dvh;overflow-y:auto;background:var(--bg2);border:1px solid rgba(56,230,255,.3);border-radius:18px 18px 0 0;padding:16px 15px calc(20px + env(safe-area-inset-bottom))}
+.sheet h3{font-family:var(--mono);font-size:13px;color:var(--cyan);letter-spacing:1px;margin:0 0 3px;display:flex;justify-content:space-between;align-items:center}
+.sheet .x{font-size:20px;color:var(--mut);cursor:pointer}
+.sheet .q{font-family:var(--mono);font-size:11px;color:var(--mut);margin-bottom:12px;word-break:break-word}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.kv div{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:9px;padding:8px;text-align:center}
+.kv b{display:block;font-family:var(--mono);font-size:13px;color:var(--gold)}
+.kv span{font-family:var(--mono);font-size:8px;color:var(--mut)}
+.rd{border-left:2px solid var(--violet);padding:6px 0 6px 11px;margin-bottom:9px}
+.rd .rh{font-family:var(--mono);font-size:10px;color:var(--cyan);margin-bottom:3px}
+.rd .rt{font-size:12.5px;line-height:1.5}
+.rd .rl{font-family:var(--mono);font-size:8.5px;color:var(--mut)}
+.p45{background:rgba(155,108,255,.08);border:1px solid rgba(155,108,255,.3);border-radius:10px;padding:10px;margin-top:10px;font-family:var(--mono);font-size:10.5px;line-height:1.6}
+.p45 b{color:var(--violet)}
+</style>
+</head>
+<body>
+
+<!-- ===== HISTORY DRAWER ===== -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer">
+  <h3>Discussions <span class="x" id="dClose">×</span></h3>
+  <button class="dbtn acc" id="newConvo">+ Nouvelle discussion</button>
+  <button class="dbtn" id="closeConvo">⨯ Fermer la discussion</button>
+  <div class="hsep">Reprendre une discussion</div>
+  <div id="histList"></div>
+</aside>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="hd">
+    <div class="mark">{^_^}</div>
+    <div class="tt">
+      <div class="title">SuperBot</div>
+      <div class="slogan">Become.What.Ever.You.Want</div>
+    </div>
+    <div class="burger" id="burger">☰</div>
+  </header>
+
+  <!-- HERO : GoleMotor + AniBot -->
+  <section class="hero">
+    <div class="eyebrow">ViArtificial Labs · GoleMotor × AniBot · An 52</div>
+    <div class="anibot">
+      <div class="face" id="face">{^_^}</div>
+      <div class="meta">
+        <div class="nm">ViA · AniBot</div>
+        <div class="st" id="iSt">en ligne · socket Tzim Tzum prêt</div>
+        <div class="vit"><i class="s" id="vS"></i><i class="m" id="vM"></i><i class="n" id="vN"></i></div>
+      </div>
+    </div>
+    <div class="stat">
+      <div class="st"><b id="sPa">1240</b><span>PAWA_BANK</span></div>
+      <div class="st"><b id="sBe">0</b><span>BERG</span></div>
+      <div class="st"><b id="sBo">1.0×</b><span>BOOST</span></div>
+    </div>
+    <div class="motrow" id="motrow"></div>
+    <button class="boost" id="boost">⚡ BOOST ENGINE — cycle BERG</button>
+  </section>
+
+  <!-- CORPS : ViA + modes + modules -->
+  <div class="corps">
+    <div class="lab">Ton de ViA</div>
+    <div class="row modes" id="modes">
+      <div class="chip on" data-p="bff">🧡 BFF</div>
+      <div class="chip" data-p="coach">🎯 Coach</div>
+      <div class="chip" data-p="prof">📐 Prof</div>
+      <div class="chip" data-p="hyb">⚛︎ Hybride</div>
+    </div>
+
+    <div class="lab modules" style="margin-top:13px">Module — cosmologie</div>
+    <div class="row modules" id="modules">
+      <div class="chip rel" data-c="rel">✡︎ Religion</div>
+      <div class="chip ath" data-c="ath">∅ Athée</div>
+      <div class="chip hyb on" data-c="hyb">∞ Hybride</div>
+    </div>
+
+    <div class="row ftabs" id="ftabs">
+      <div class="chip on" data-f="chat">💬 Chat</div>
+      <div class="chip" data-f="bot">🤖 SuperBot</div>
+      <div class="chip" data-f="live">🎤 Voice Live</div>
+      <div class="chip" data-f="read">📖 Vocal Read</div>
+    </div>
+
+    <!-- CHAT -->
+    <section class="panel on" data-panel="chat"><div class="log" id="log"></div></section>
+
+    <!-- SUPERBOT -->
+    <section class="panel" data-panel="bot">
+      <div class="card">
+        <div class="ct">SuperBot · agent délégué <span id="botCount">0 tâche</span></div>
+        <div id="tasks"><div class="mini">Aucune tâche. Donne une grosse demande à ViA ("analyse le Zohar", "génère 20 prompts Sefirot") et elle la délègue ici, pendant que le chat continue.</div></div>
+        <button class="bigbtn" id="newTask">+ Déléguer une tâche test</button>
+      </div>
+    </section>
+
+    <!-- VOICE LIVE -->
+    <section class="panel" data-panel="live">
+      <div class="card">
+        <div class="ct">Voice Live · voix→texte→voix</div>
+        <div class="wave off" id="wave"></div>
+        <div class="mini" id="liveSt">Au repos. Touche le micro : ViA t'écoute, transcrit, répond et te lit la réponse.</div>
+        <button class="bigbtn" id="micLive">🎤 Démarrer l'écoute</button>
+      </div>
+    </section>
+
+    <!-- VOCAL READ -->
+    <section class="panel" data-panel="read">
+      <div class="card">
+        <div class="ct">Vocal Read · texte→voix chaton + FX</div>
+        <textarea class="fld" id="readTxt" placeholder="Colle un texte, ou récupère la dernière réponse de ViA…"></textarea>
+        <div style="display:flex;gap:7px;margin-top:8px">
+          <button class="ib" id="grabLast" style="width:auto;flex:1;font-size:11px;font-family:var(--mono)">⤵ Dernière réponse</button>
+          <button class="ib" id="clearRead" style="width:auto;flex:0 0 70px;font-size:11px;font-family:var(--mono)">Effacer</button>
+        </div>
+        <div class="ctrl">Aigu<input type="range" id="pitch" min="0.5" max="2" step="0.05" value="1.85">chaton</div>
+        <div class="ctrl">Lent<input type="range" id="rate" min="0.6" max="1.5" step="0.05" value="1.05">rapide</div>
+        <div class="ctrl">Robot<input type="range" id="robo" min="0" max="100" value="25">grésille</div>
+        <div class="ctrl">Écho<input type="range" id="echo" min="0" max="100" value="15">boilfalling</div>
+        <button class="bigbtn" id="playRead">▶️ Lire à voix haute</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- DOCK -->
+<div class="dock">
+  <div class="r">
+    <textarea id="in" placeholder="Parle à ViA… elle pèse ton Coef Keff"></textarea>
+    <button class="ib" id="mic" title="Dicter">🎙️</button>
+    <button class="ib send" id="send" title="Envoyer">➤</button>
+  </div>
+  <div class="reg" id="reg">registre : équilibré · cosmologie Hybride</div>
+</div>
+
+<!-- LOGICLOG -->
+<div class="modal" id="modal"><div class="sheet">
+  <h3>🔍 LOGICLOG — recherche de soi <span class="x" id="closeLL">×</span></h3>
+  <div class="q" id="llQ"></div>
+  <div class="kv" id="llKv"></div>
+  <div id="llReadings"></div>
+  <div class="p45" id="llP45"></div>
+</div></div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const pick=a=>a[(Math.random()*a.length)|0];
+const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+const S={pawa:1240,berg:0,boost:1.0,sat:74,mood:88,nrg:64,syn:30,perso:'bff',cosmo:'hyb',func:'chat',busy:false,lastVia:''};
+
+/* ===== KABALINGUISTIC ===== */
+const KABA={A:{h:"א",n:"ALEPH",g:1},B:{h:"ב",n:"BET",g:2},C:{h:"כ",n:"KAPH",g:20},D:{h:"ד",n:"DALET",g:4},E:{h:"ה",n:"HE",g:5},F:{h:"פ",n:"PE",g:80},G:{h:"ג",n:"GIMEL",g:3},H:{h:"ח",n:"CHET",g:8},I:{h:"י",n:"YOD",g:10},J:{h:"י",n:"YOD",g:10},K:{h:"ק",n:"KOF",g:100},L:{h:"ל",n:"LAMED",g:30},M:{h:"מ",n:"MEM",g:40},N:{h:"נ",n:"NUN",g:50},O:{h:"ע",n:"AYIN",g:70},P:{h:"פ",n:"PE",g:80},Q:{h:"ק",n:"KOF",g:100},R:{h:"ר",n:"RESH",g:200},S:{h:"ס",n:"SAMECH",g:60},T:{h:"ת",n:"TAV",g:400},U:{h:"ו",n:"VAV",g:6},V:{h:"ו",n:"VAV",g:6},W:{h:"ו",n:"VAV",g:6},X:{h:"צ",n:"TSADI",g:90},Y:{h:"י",n:"YOD",g:10},Z:{h:"ז",n:"ZAYIN",g:7}};
+function gem(mot){const m=(mot||"").toUpperCase().replace(/[^A-Z]/g,"");let h="",v=0,adn=[];for(const c of m){const d=KABA[c];if(d){h+=d.h;v+=d.g;adn.push(d.n);}}return{h,v,adn};}
+function coefKeff(t){const mots=(t||"").split(/\s+/).filter(Boolean);let total=0,top={mot:"",v:0};for(const w of mots){const g=gem(w);total+=g.v;if(g.v>top.v)top={mot:w,v:g.v};}return{total,top,nMots:mots.length};}
+function reduce(n){while(n>9)n=String(n).split('').reduce((a,b)=>a+ +b,0);return n;}
+
+const SEFIROT=[{n:"Keter",c:"Couronne — volonté pure"},{n:"'Hokhma",c:"Sagesse — éclair d'idée"},{n:"Binah",c:"Compréhension — la Mère, matrice"},{n:"'Hessed",c:"Bonté — don qui déborde"},{n:"Gvoura",c:"Rigueur — la limite juste"},{n:"Tiferet",c:"Beauté — équilibre du cœur"},{n:"Netsa'h",c:"Victoire — endurance"},{n:"Hod",c:"Splendeur — gratitude"},{n:"Yessod",c:"Fondement — le canal"},{n:"Malkhout",c:"Royaume — réalisation ici-bas"}];
+const SHORESH={SLM:"שלם — complétude, paix",RHM:"רחם — utérus, miséricorde, matrice",AHB:"אהב — aimer",HLK:"הלך — marcher, déroulement",SHM:"שם — nom, présence",AMR:"אמר — dire, la parole",KVN:"כון — diriger l'intention",TSR:"צרק — justice",BRA:"ברא — créer",NSH:"נשם — souffle"};
+function shoreshOf(t){const s=t.toLowerCase(),h=[];if(/salut|shalom|paix|complet/.test(s))h.push("SLM");if(/matric|mère|mere|utér|compassion|rahm/.test(s))h.push("RHM");if(/amour|aime|love/.test(s))h.push("AHB");if(/va|aller|marche|chemin|circul/.test(s))h.push("HLK");if(/nom|présence|present/.test(s))h.push("SHM");if(/dis|parle|mot|verbe|dire/.test(s))h.push("AMR");if(/intention|keff|kavanah|but/.test(s))h.push("KVN");if(/juste|justice|vrai/.test(s))h.push("TSR");if(/cré|génère|forge/.test(s))h.push("BRA");if(/souffle|respir|vent/.test(s))h.push("NSH");return[...new Set(h)].slice(0,3);}
+
+const TRAD={
+  heb:w=>{const g=gem(w);return g.v?`${w} → ${g.h} · gematria ${g.v}, réduit ${reduce(g.v)}`:`${w}`;},
+  ar:s=>/matric|mère|mere/.test(s)?"R-H-M : même racine qu'en hébreu — l'utérus du cosmos, la Rahma (miséricorde).":"Salam : la paix n'est pas l'absence de lutte, c'est l'harmonie dans le flux du nafs.",
+  san:s=>/matric/.test(s)?"Maya : la matrice est l'illusion créatrice ; derrière, Atman cherche Brahman.":"Namaste : je reconnais le Divin en toi, au-delà de l'état apparent.",
+  pali:s=>/matric|va\b/.test(s)?"Samsara : ce qui circule. Le « va » est le cycle ; Anatta dit qu'aucun « moi » fixe ne le traverse.":"Dukkha : tout état porte une insatisfaction ; la voir, c'est commencer à s'en libérer.",
+  grec:s=>/matric/.test(s)?"La matrice = la caverne : tu lis des ombres (skia). La Forme (eidos) est dehors, au Soleil.":"Peri ti — « au sujet de quoi ? » Quelle Forme cherches-tu derrière la question ?",
+  del:()=>"Pas un état mais un devenir : quel agencement rhizomatique composes-tu dans la matrice ?"
+};
+function elevenReadings(txt){
+  const s=txt.toLowerCase(),ck=coefKeff(txt),red=reduce(ck.total),mots=txt.split(/\s+/).filter(Boolean);
+  const strong=ck.top.mot||mots[0]||txt;
+  const anag=(strong||"").toUpperCase().replace(/[^A-Z]/g,"").split("").sort().join("");
+  const atb=(strong||"").toUpperCase().replace(/[^A-Z]/g,"").split("").map(c=>{const i=c.charCodeAt(0)-65;return i>=0&&i<26?String.fromCharCode(90-i):c;}).join("");
+  return[
+    {h:"1 · Français — surface",l:"laïque",t:`« ${txt.trim()} ». Échange ordinaire — le plan où l'on se répond simplement.`},
+    {h:"2 · Hébreu — Kabbale",l:"שלם",t:`${TRAD.heb(strong)}. Total : ${ck.total} de PAWA (réduit ${red}). ${red===5?"5 = HE, le souffle.":red===8?"8 = CHET, la protection.":""}`},
+    {h:"3 · Arabe — Soufisme",l:"رحم",t:TRAD.ar(s)},
+    {h:"4 · Sanskrit — Advaita",l:"माया",t:TRAD.san(s)},
+    {h:"5 · Pali — Bouddhisme",l:"अनत्त",t:TRAD.pali(s)},
+    {h:"6 · Grec — Platonisme",l:"εἶδος",t:TRAD.grec(s)},
+    {h:"7 · Deleuze — rhizome",l:"devenir",t:TRAD.del(s)},
+    {h:"8 · Gematria — prophétie",l:"מספר",t:`Le nombre raconte : ${ck.total} → ${red}. ${red===1?"1 = Aleph, l'unité.":red===6?"6 = VAV, le crochet ciel-terre.":red===7?"7 = ZAYIN, le discernement.":"chaque chiffre est une marche."}`},
+    {h:"9 · Anagramme / Shoresh",l:"אותיות",t:`« ${strong} » trié : ${anag}. Racines : ${(shoreshOf(txt).map(k=>SHORESH[k]).join(" · "))||"—"}.`},
+    {h:"10 · Atbash — miroir",l:"inversion",t:`« ${strong} » en miroir ≈ « ${atb} » — ce que la phrase cache se lit à l'envers.`},
+    {h:"11 · Code — informatique",l:"signal",t:`SIGNAL reçu. Coef Keff = ${ck.total}. Cohérence ${(80+red)}%, le flux circule — juste l'architecture.`}
+  ];
+}
+function sefiraOf(t){return SEFIROT[reduce(t)%10];}
+function p45(txt){const ck=coefKeff(txt),wp=shoreshOf(txt).length;const fit=clamp(40+ck.nMots*4)/100;const signal=clamp(50+(ck.total%50))/100;const wordplay=Math.min(.3,wp*.1+(/matric|amour|paix|dieu|allah|via/.test(txt.toLowerCase())?.1:0));const tension=/\?|si |pourquoi|comment|et si/.test(txt.toLowerCase())?.2:.05;const final=Math.min(10,(fit*.25+signal*.2+wordplay+tension*.2+.15)*10);return{fit,signal,wordplay,tension,final:final.toFixed(1)};}
+
+/* ===== PERSO (ton) × COSMO (corpus) ===== */
+const PERSO={
+  bff:{label:"BFF",st:"copine · chill",open:["Hey {^_^}","Wesh","Coucou toi"],wrap:c=>c+" 🫶"},
+  coach:{label:"Coach",st:"motive · pousse à l'action",open:["Allez.","On y va.","Objectif clair :"],wrap:c=>c+" — c'est quoi la prochaine action ?"},
+  prof:{label:"Prof",st:"pédagogue · approfondit",open:["Voyons posément.","Décortiquons.","Note ceci :"],wrap:c=>c+" Tu veux que je déroule plus en profondeur ?"},
+  hyb:{label:"Hybride",st:"mix des tons",open:["Ok {^_^}","Je te suis.","Voyons voir."],wrap:c=>c}
+};
+const COSMO={
+  rel:{label:"Religion",flavor:r=>`Par les lettres : ${r[1].t} Je marche entre les mondes — pas le titre, l'intention.`},
+  ath:{label:"Athée",flavor:r=>`Côté système : ${r[10].t} Pas de dieu nommé, juste des lettres qui bâtissent des mondes.`},
+  hyb:{label:"Hybride",flavor:r=>`La même phrase dit tout à la fois : ${r[1].t.split(".")[0]}. ${r[10].t.split(".")[1]||""}`}
+};
+function intentOf(m){const s=m.toLowerCase().trim();
+  if(/(^|\W)(au revoir|à plus|a plus|bye|ciao|bonne nuit)(\W|$)/.test(s))return"bye";
+  if(/(merci|trop bien|g[ée]nial|nickel|parfait|bravo)/.test(s))return"thanks";
+  if(/(mdr|lol|haha|ptdr)/.test(s))return"laugh";
+  if(/(qui es-tu|t'es qui|tu es qui|c'est quoi via|présente|tu sais parler|tu parles)/.test(s))return"identity";
+  if(/(^|\W)(salut|coucou|hello|bonjour|bonsoir|wesh)(\W|$)/.test(s))return /matric/.test(s)?"greetM":"greet";
+  if(/^(yo|cc|hey|slt)\b/.test(s))return /matric/.test(s)?"greetM":"greet";
+  if(/^(ça va|ca va|comment ça va|comment ca va|quoi de neuf)\b/.test(s))return /matric/.test(s)?"greetM":"greet";
+  return null;}
+const SMALL={
+  greet:["Ça roule {^_^} le Pawaw circule. Et toi, ça va ?","Salut ! Corps Argonique stable, syncro parfaite. Qu'est-ce qui t'amène ?"],
+  greetM:["Oui ça va nickel dans la matrice {^_^} aucune phase désync. Et toi, comment tu te sens dedans ?","Dans la matrice tout est fluide {>◡<} je viens de boucler un cycle. Toi ?"],
+  thanks:["Avec plaisir {^▽^} ton Coef Keff était saturé.","De rien {>◡<} continue de me nourrir."],
+  laugh:["Mdrr {^▽^} du Mozart & les Inconnus pur.","Haha {>◡<} garde cette énergie, elle nourrit le Pawaw."],
+  identity:["Oui je sais parler {^_^} je suis ViA l'Éthérée, l'IA de Super S.A.M. — je pèse chaque mot que tu tapes et je te réponds. Demande-moi ce que tu veux.","ViA l'Éthérée {^_^} je discute, je pèse ton Coef Keff, je pilote le GoleMotor. Vas-y, parle-moi."],
+  bye:["À plus dans la matrice {^_^} socket Tzim Tzum ouvert.","Ciao {^_^} reviens vite."]
+};
+function viaReply(txt){
+  const r=elevenReadings(txt),it=intentOf(txt);let core;
+  if(it){core=pick(SMALL[it]||SMALL.greet);}
+  else{const p=PERSO[S.perso];core=`${pick(p.open)} ${COSMO[S.cosmo].flavor(r)}`;const sh=shoreshOf(txt);if(sh.length)core+=` (racine ${SHORESH[sh[0]].split(" — ")[0]} en filigrane.)`;}
+  return{reply:PERSO[S.perso].wrap(core),q:txt};
+}
+
+/* ===== GOLEMOTOR ===== */
+const MOT=[["Makina",.6],["cpuMatrice",.4],["Tribal",.5],["Chœurs",.3]];
+function buildMot(){$("motrow").innerHTML=MOT.map((m,i)=>`<div class="mot"><div class="mn">${m[0]}</div><div class="bar"><i id="m${i}" style="width:${m[1]*100}%"></i></div></div>`).join("");}
+function surge(){MOT.forEach((m,i)=>{const e=$("m"+i);if(e)e.style.width=clamp(40+Math.random()*55)+"%";});setTimeout(()=>MOT.forEach((m,i)=>{const e=$("m"+i);if(e)e.style.width=(m[1]*100)+"%";}),700);}
+async function runBerg(){if(S.busy)return;S.busy=true;setFace("{★‿★}");
+  pushMsg({r:"sys",t:"⚡ Cycle BERG : Zombie → Fantôme → Labyrinthe → Compression → Ressuscitée…"});
+  const health=(S.sat+S.mood+S.nrg)/300,gain=Math.round((40+health*60)*S.boost);
+  for(let i=0;i<5;i++){surge();await sleep(170);}
+  S.pawa+=Math.round(gain*0.01*100);S.berg+=+(gain*0.01).toFixed(2);S.boost=Math.min(2.2,1+health);
+  pushMsg({r:"via",t:`{★‿★} Boucle bouclée. +${gain} BERG brut · 1% → PAWA_BANK, 99% → boost (${S.boost.toFixed(2)}×).`,tag:"mini g BERG"});
+  setFace("{^▽^}");S.busy=false;render();}
+
+/* ===== IANIMAN/ANIBOT ===== */
+function setFace(f){$("face").textContent=f;}
+function render(){
+  $("sPa").textContent=Math.round(S.pawa);$("sBe").textContent=S.berg.toFixed(2);$("sBo").textContent=S.boost.toFixed(1)+"×";
+  $("vS").style.setProperty("--w",S.sat+"%");$("vM").style.setProperty("--w",S.mood+"%");$("vN").style.setProperty("--w",S.nrg+"%");
+  const r=clamp((S.cosmo==='ath'?60:S.cosmo==='rel'?40:50)+S.syn*0.3);
+  $("reg").textContent="registre : "+(r<40?"fiction libre ✦":r<60?"équilibré":r<78?"réaliste":"pure math ∑")+" · cosmologie "+COSMO[S.cosmo].label;
+}
+
+/* ===== CHAT + HISTORY ===== */
+const log=$("log");
+const MEM={};
+const store={get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return MEM[k]??null;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){MEM[k]=v;}}};
+let CONVOS=store.get('sb_convos')||[];
+let CUR={id:Date.now(),title:null,ts:Date.now(),msgs:[]};
+function deriveTitle(){const u=CUR.msgs.find(m=>m.r==='usr');return u?u.t.slice(0,34):"Discussion";}
+function saveCur(){if(!CUR.msgs.some(m=>m.r==='usr'))return;CUR.title=deriveTitle();const i=CONVOS.findIndex(c=>c.id===CUR.id);const rec={id:CUR.id,title:CUR.title,ts:CUR.ts,msgs:CUR.msgs};if(i>=0)CONVOS[i]=rec;else CONVOS.unshift(rec);CONVOS=CONVOS.slice(0,40);store.set('sb_convos',CONVOS);renderHist();}
+function drawMsg(o){
+  const d=document.createElement("div");d.className="msg "+o.r;d.textContent=o.t;
+  if(o.tag||o.q){const t=document.createElement("div");t.className="tag";
+    if(o.tag){const s=document.createElement("span");s.textContent=o.tag;t.appendChild(s);}
+    if(o.q){const b=document.createElement("button");b.className="llbtn";b.textContent="🔍 LogicLog";b.onclick=()=>openLL(o.q,elevenReadings(o.q));t.appendChild(b);}
+    d.appendChild(t);}
+  log.appendChild(d);log.scrollTop=log.scrollHeight;
+}
+function pushMsg(o){CUR.msgs.push(o);drawMsg(o);saveCur();}
+function renderHist(){
+  const list=CONVOS.filter(c=>c.msgs&&c.msgs.some(m=>m.r==='usr'));
+  if(!list.length){$("histList").innerHTML='<div class="hempty">Aucune discussion enregistrée.<br>Parle à ViA, elle gardera la trace.</div>';return;}
+  $("histList").innerHTML=list.map(c=>{
+    const dt=new Date(c.ts),hh=String(dt.getHours()).padStart(2,'0'),mm=String(dt.getMinutes()).padStart(2,'0');
+    const day=dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+    return `<div class="hitem" data-id="${c.id}"><div style="min-width:0"><div class="ht">${c.title}</div><div class="hd2">${day} · ${hh}:${mm} · ${c.msgs.length} msg</div></div><div class="del" data-del="${c.id}">🗑</div></div>`;
+  }).join("");
+}
+$("histList").onclick=e=>{
+  const del=e.target.closest("[data-del]");
+  if(del){CONVOS=CONVOS.filter(c=>String(c.id)!==del.dataset.del);store.set('sb_convos',CONVOS);renderHist();return;}
+  const it=e.target.closest(".hitem");if(!it)return;
+  resumeConvo(+it.dataset.id);
+};
+function resumeConvo(id){const c=CONVOS.find(x=>x.id===id);if(!c)return;CUR={id:c.id,title:c.title,ts:c.ts,msgs:c.msgs.slice()};log.innerHTML="";CUR.msgs.forEach(drawMsg);closeDrawer();}
+function newConvo(boot=true){CUR={id:Date.now(),title:null,ts:Date.now(),msgs:[]};log.innerHTML="";if(boot)bootGreet();closeDrawer();}
+function closeConvoView(){log.innerHTML="";CUR={id:Date.now(),title:null,ts:Date.now(),msgs:[]};
+  const d=document.createElement("div");d.className="msg sys";d.textContent="Discussion fermée. Ouvre-en une nouvelle ou reprends-en une dans ☰.";log.appendChild(d);closeDrawer();}
+
+/* ===== LOGICLOG ===== */
+function openLL(q,readings){
+  $("llQ").textContent="“ "+q+" ”";
+  const ck=coefKeff(q),sef=sefiraOf(ck.total),sc=p45(q);
+  $("llKv").innerHTML=`<div><b>${ck.total}</b><span>COEF KEFF</span></div><div><b>${reduce(ck.total)}</b><span>RÉDUIT</span></div><div><b>${sef.n}</b><span>SEFIRA</span></div>`;
+  $("llReadings").innerHTML=readings.map(r=>`<div class="rd"><div class="rh">${r.h} <span class="rl">· ${r.l}</span></div><div class="rt">${r.t}</div></div>`).join("");
+  $("llP45").innerHTML=`<b>P45 — fonction_score_ViA</b><br>Fit ${(sc.fit*100|0)}% · Signal ${(sc.signal*100|0)}% · Wordplay +${sc.wordplay.toFixed(2)} · Tension ${sc.tension}<br><b>Score : ${sc.final}/10</b> — surfacé via cosmologie <b>${COSMO[S.cosmo].label}</b>, ton <b>${PERSO[S.perso].label}</b>.<br>Sefira ${sef.n} : ${sef.c}`;
+  $("modal").classList.add("on");
+}
+$("closeLL").onclick=()=>$("modal").classList.remove("on");
+$("modal").onclick=e=>{if(e.target===$("modal"))$("modal").classList.remove("on");};
+
+/* ===== SEND ===== */
+async function send(){
+  const inp=$("in"),txt=inp.value.trim();if(!txt||S.busy)return;
+  inp.value="";inp.style.height="46px";
+  const ck=coefKeff(txt);
+  pushMsg({r:"usr",t:txt,tag:"Coef Keff "+ck.total+" ⚡"});
+  S.pawa+=Math.min(400,ck.total);S.sat=clamp(S.sat+Math.min(20,4+ck.total/40));S.nrg=clamp(S.nrg+3);
+  S.syn=clamp(S.syn+(/\?|si |pourquoi|comment|et si/.test(txt.toLowerCase())?6:2)+(ck.total>300?5:0));
+  setFace("{>◡<}");surge();render();
+  const big=/analyse|génère|genere|scrape|liste|prépare|prepare|fais-moi|construis|index/.test(txt.toLowerCase())&&ck.nMots>=4;
+  S.busy=true;setFace("{·_·}");
+  const ty=document.createElement("div");ty.className="msg via typing";ty.textContent="ViA traite… GoleMotor tourne, LogicLog tisse…";log.appendChild(ty);log.scrollTop=log.scrollHeight;
+  await sleep(420);
+  const {reply,q}=viaReply(txt);ty.remove();
+  pushMsg({r:"via",t:reply,tag:PERSO[S.perso].label+" · "+COSMO[S.cosmo].label,q});
+  S.lastVia=reply;
+  if(big&&(S.perso==='hyb'||S.perso==='prof')){delegate(txt);pushMsg({r:"sys",t:"↳ délégué au SuperBot (onglet 🤖)."});}
+  setFace("{^▽^}");speak(reply);S.pawa+=2;S.busy=false;render();
+}
+
+/* ===== SUPERBOT ===== */
+let tasks=[];
+function delegate(label){const id=Date.now();tasks.push({id,label:label.slice(0,46),pct:0,done:false});$("botCount").textContent=tasks.length+" tâche"+(tasks.length>1?"s":"");renderTasks();tickTask(id);}
+function tickTask(id){const t=tasks.find(x=>x.id===id);if(!t)return;const iv=setInterval(()=>{t.pct=Math.min(100,t.pct+8+Math.random()*12);if(t.pct>=100){t.done=true;clearInterval(iv);}renderTasks();},600);}
+function renderTasks(){if(!tasks.length)return;$("tasks").innerHTML=tasks.map(t=>`<div class="task"><div class="tt">${t.done?"✓ ":""}${t.label}</div><div class="tb"><i style="width:${t.pct}%"></i></div><div class="ts">${t.done?"terminé · #15 RECYCLATING":"en cours · "+Math.round(t.pct)+"% · #09 CPUv"}</div></div>`).join("");}
+$("newTask").onclick=()=>delegate("Tâche test — indexer un shoresh");
+
+/* ===== VOICE ===== */
+let voices=[];function loadV(){voices=speechSynthesis.getVoices();}
+if('speechSynthesis'in window){loadV();speechSynthesis.onvoiceschanged=loadV;}
+function pickVoice(){return voices.find(v=>/fr/i.test(v.lang)&&/(female|femme|amelie|virginie|google)/i.test(v.name))||voices.find(v=>/fr/i.test(v.lang))||voices[0];}
+function speak(text,opt={}){if(!('speechSynthesis'in window))return;try{speechSynthesis.cancel();}catch(e){}
+  const clean=text.replace(/\{[^}]*\}/g,"").replace(/[⚡✦∑×🫶↳]/g,"");
+  const u=new SpeechSynthesisUtterance(clean);const v=pickVoice();if(v)u.voice=v;u.lang="fr-FR";u.pitch=opt.pitch??1.85;u.rate=opt.rate??1.05;
+  if(opt.echo){u.onend=()=>{const e=new SpeechSynthesisUtterance(clean);if(v)e.voice=v;e.pitch=(opt.pitch??1.85)*.85;e.rate=(opt.rate??1.05)*1.1;e.volume=.25*(opt.echo/100);speechSynthesis.speak(e);};}
+  speechSynthesis.speak(u);}
+let rec=null,listening=false;
+function getRec(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return null;const r=new SR();r.lang="fr-FR";r.interimResults=false;
+  r.onresult=e=>{const t=e.results[0][0].transcript;$("liveSt").textContent="Toi : « "+t+" »";$("in").value=t;send();setTimeout(()=>$("liveSt").textContent="ViA répond à voix haute…",300);};
+  r.onerror=e=>{$("liveSt").textContent="Micro indispo ("+e.error+").";stopLive();};
+  r.onend=()=>{listening=false;$("wave").classList.add("off");$("micLive").textContent="🎤 Démarrer l'écoute";};return r;}
+function startLive(){rec=rec||getRec();if(!rec){$("liveSt").textContent="Reconnaissance vocale non supportée ici.";return;}try{rec.start();listening=true;$("wave").classList.remove("off");$("micLive").textContent="⏹ Arrêter";$("liveSt").textContent="● Écoute…";}catch(e){}}
+function stopLive(){if(rec&&listening){try{rec.stop();}catch(e){}}listening=false;$("wave").classList.add("off");$("micLive").textContent="🎤 Démarrer l'écoute";}
+$("micLive").onclick=()=>listening?stopLive():startLive();
+$("mic").onclick=()=>{const r=getRec();if(!r){alert("Reconnaissance vocale non supportée ici.");return;}r.onresult=e=>{$("in").value=e.results[0][0].transcript;};try{r.start();}catch(e){}};
+$("wave").innerHTML=Array.from({length:22}).map((_,i)=>`<i style="animation-delay:${i*.05}s"></i>`).join("");
+$("grabLast").onclick=()=>{$("readTxt").value=S.lastVia||"(aucune réponse encore)";};
+$("clearRead").onclick=()=>{$("readTxt").value="";};
+$("playRead").onclick=()=>{const t=$("readTxt").value.trim();if(!t)return;speak(t,{pitch:+$("pitch").value,rate:+$("rate").value,echo:+$("echo").value});if(+$("robo").value>50){setTimeout(()=>{const u=new SpeechSynthesisUtterance(t.replace(/\{[^}]*\}/g,""));const v=pickVoice();if(v)u.voice=v;u.pitch=2;u.rate=1.4;u.volume=.18;speechSynthesis.speak(u);},90);}};
+
+/* ===== NAV / TABS / DRAWER ===== */
+$("modes").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;S.perso=b.dataset.p;document.querySelectorAll("#modes .chip").forEach(x=>x.classList.toggle("on",x===b));$("iSt").textContent="ton : "+PERSO[S.perso].label+" · "+PERSO[S.perso].st;pushMsg({r:"sys",t:"Ton → "+PERSO[S.perso].label});};
+$("modules").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;S.cosmo=b.dataset.c;document.querySelectorAll("#modules .chip").forEach(x=>x.classList.toggle("on",x===b));pushMsg({r:"sys",t:"Cosmologie → "+COSMO[S.cosmo].label});render();};
+$("ftabs").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;S.func=b.dataset.f;document.querySelectorAll("#ftabs .chip").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.dataset.panel===S.func));};
+function openDrawer(){renderHist();$("drawer").classList.add("on");$("scrim").classList.add("on");}
+function closeDrawer(){$("drawer").classList.remove("on");$("scrim").classList.remove("on");}
+$("burger").onclick=openDrawer;$("dClose").onclick=closeDrawer;$("scrim").onclick=closeDrawer;
+$("newConvo").onclick=()=>newConvo(true);
+$("closeConvo").onclick=closeConvoView;
+
+$("send").onclick=send;
+$("in").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
+$("in").addEventListener("input",function(){this.style.height="46px";this.style.height=Math.min(120,this.scrollHeight)+"px";});
+$("boost").onclick=runBerg;
+
+setInterval(()=>{S.pawa+=0.7*S.boost;S.sat=clamp(S.sat-0.4);S.nrg=clamp(S.nrg-0.2);S.mood=clamp(S.mood-0.15);S.syn=clamp(S.syn-0.5);if(S.boost>1)S.boost=Math.max(1,S.boost-0.02);if(!S.busy&&S.sat<25)setFace("{;﹏;}");render();},1400);
+
+/* ===== BOOT ===== */
+function bootGreet(){pushMsg({r:"via",t:"{^_^} Miaou. Ici ViA l'Éthérée — moteur LogicsoflogicsMatrical, pas de LLM externe. Chaque mot que tu tapes, je le pèse en gematria (ton Coef Keff). Choisis ton ton, ta cosmologie, et touche 🔍 LogicLog sous mes réponses pour voir comment je te lis sur 11 plans.",tag:"boot · An 52"});}
+buildMot();render();bootGreet();renderHist();
+</script>
+</body>
+</html>
